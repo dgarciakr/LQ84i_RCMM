@@ -31,10 +31,15 @@ public class StatusFragment extends Fragment {
      */
     private View dataHolder;
 
+    /**
+     * Actividad anfitriona
+     */
+    private Activity mHost;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Activity mHost = getActivity();
+        mHost = getActivity();
         StatusViewModelFactory factory = new StatusViewModelFactory((TelephonyManager)
                 Objects.requireNonNull(mHost).getSystemService(Context.TELEPHONY_SERVICE));
         viewModel = ViewModelProviders.of(this, factory).get(StatusViewModel.class);
@@ -62,6 +67,6 @@ public class StatusFragment extends Fragment {
     }
 
     private void updateUI() {
-        viewModel.updateView(dataHolder);
+        viewModel.updateView(dataHolder, mHost.getResources());
     }
 }

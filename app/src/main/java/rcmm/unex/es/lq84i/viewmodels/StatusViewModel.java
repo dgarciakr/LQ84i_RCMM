@@ -2,6 +2,7 @@ package rcmm.unex.es.lq84i.viewmodels;
 
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModel;
+import android.content.res.Resources;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.TextView;
@@ -49,11 +50,13 @@ public class StatusViewModel extends ViewModel {
     /**
      * Actualiza la vista con los últimos datos
      *
-     * @param v Vista que contiene los TextViews con los datos a actualizar
+     * @param v Vista que contiene los TextViews con los datos a actualizar7
+     * @param resources Recursos del sistema
      */
     @SuppressLint("SetTextI18n")
-    public void updateView(View v) {
+    public void updateView(View v, Resources resources) {
         TextView currView;
+        //TODO Sustituir todos los currView.getText().toString() por resources.getString(R.string.ID). El ID es el mismo nombre que el del R.id para el findViewByID en cada caso
         currView = v.findViewById(R.id.device_id);
         currView.setText(currView.getText().toString() + data.get(0));
         currView = v.findViewById(R.id.phone_num);
