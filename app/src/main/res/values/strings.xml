@@ -6,4 +6,15 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="device_id">ID Dispositivo: </string>
+    <string name="phone_num">Número de teléfono: </string>
+    <string name="software_ver">Versión de software: </string>
+    <string name="op_name">Nombre de operador: </string>
+    <string name="sim_country_code">Código de país (SIM): </string>
+    <string name="sim_op">Operador (SIM): </string>
+    <string name="sim_sn">Número de serie (SIM): </string>
+    <string name="sub_id">ID de suscriptor: </string>
+    <string name="network_type">Tipo de red móvil: </string>
+    <string name="voice_radio_type">Tipo de radio voz: </string>
+    <string name="update">Actualizar</string>
 </resources>

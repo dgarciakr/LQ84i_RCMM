@@ -1,4 +1,4 @@
-package rcmm.unex.es.lq84i;
+package rcmm.unex.es.lq84i.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import rcmm.unex.es.lq84i.R;
+import rcmm.unex.es.lq84i.fragments.StatusFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +43,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().
+                    add(R.id.frag_container, new StatusFragment()).commit();
+        }
     }
 
     @Override
