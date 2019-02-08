@@ -75,4 +75,11 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/update" />
+
+    <Button
+        android:id="@+id/save_csv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/save_as_csv" />
 </LinearLayout>

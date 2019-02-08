@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
@@ -51,10 +52,25 @@ public class StatusFragment extends Fragment {
         View res = inflater.inflate(R.layout.status_info, container, false);
         dataHolder = res.findViewById(R.id.data);
         Button b = res.findViewById(R.id.button);
+        Button s = res.findViewById(R.id.save_csv);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateUI();
+            }
+        });
+        s.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewModel.saveData()) {
+                    Snackbar.make(Objects.requireNonNull(mHost.getCurrentFocus()),
+                            mHost.getResources().getString(R.string.data_saved),
+                            Snackbar.LENGTH_LONG);
+                } else {
+                    Snackbar.make(Objects.requireNonNull(mHost.getCurrentFocus()),
+                            mHost.getResources().getString(R.string.error_saving),
+                            Snackbar.LENGTH_LONG);
+                }
             }
         });
         return res;

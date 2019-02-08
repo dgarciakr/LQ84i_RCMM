@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import rcmm.unex.es.lq84i.R;
+import rcmm.unex.es.lq84i.utility.CSVTool;
 
 public class StatusViewModel extends ViewModel {
 
@@ -73,6 +74,17 @@ public class StatusViewModel extends ViewModel {
         currView.setText(currView.getText().toString() + data.get(6));
         currView = v.findViewById(R.id.voice_radio_type);
         currView.setText(currView.getText().toString() + data.get(7));
+    }
+
+    public boolean saveData() {
+        updateData();
+        String[] ids = {"device_id", "phone_num", "software_ver", "op_name", "sim_op", "sub_id",
+                "network_type", "voice_radio_type"};
+        Map<String, String> content = new LinkedHashMap<>();
+        for (int i = 0; i < FIELDS; i++) {
+            content.put(ids[i], Objects.requireNonNull(data.get(i)));
+        }
+        return CSVTool.saveAsCSV("data.csv", content);
     }
 
     /**

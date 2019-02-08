@@ -17,4 +17,7 @@
     <string name="network_type">Tipo de red móvil: </string>
     <string name="voice_radio_type">Tipo de radio voz: </string>
     <string name="update">Actualizar</string>
+    <string name="save_as_csv">Guardar como CSV</string>
+    <string name="data_saved">¡Datos guardados con éxito!</string>
+    <string name="error_saving">No se pudo guardar</string>
 </resources>
