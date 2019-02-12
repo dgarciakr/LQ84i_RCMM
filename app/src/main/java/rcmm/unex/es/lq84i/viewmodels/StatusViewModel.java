@@ -258,13 +258,14 @@ public class StatusViewModel extends ViewModel {
             public void onCellLocationChanged(CellLocation location) {
                 //TODO Cuando ya tengamos el mapa de calor
                 //TODO Toca parsear a una de sus subclases
+                cellLocationView.setText("Esto aún no está hecho");
                 super.onCellLocationChanged(location);
             }
 
             @Override
-            public void onDataConnectionStateChanged(int state) {
+            public void onDataActivity(int direction) {
                 String dataState = "???";
-                switch (state) {
+                switch (direction) {
                     case TelephonyManager.DATA_ACTIVITY_NONE:
                         dataState = "Ninguna";
                         break;
@@ -282,6 +283,24 @@ public class StatusViewModel extends ViewModel {
                         break;
                 }
                 dataView.setText(dataState);
+                super.onDataActivity(direction);
+            }
+
+            @Override
+            public void onDataConnectionStateChanged(int state) {
+                String dataState = "???";
+                switch (state) {
+                    case TelephonyManager.DATA_DISCONNECTED:
+                        dataState = "Desconectado";
+                        break;
+                    case TelephonyManager.DATA_CONNECTED:
+                        dataState = "Conectado";
+                        break;
+                    case TelephonyManager.DATA_CONNECTING:
+                        dataState = "Conectando...";
+                        break;
+                }
+                connectionStateView.setText(dataState);
                 super.onDataConnectionStateChanged(state);
             }
 
