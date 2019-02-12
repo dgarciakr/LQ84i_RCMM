@@ -85,7 +85,8 @@ public class StatusFragment extends Fragment {
                 (TextView) res.findViewById(R.id.gps_location),
                 (TextView) res.findViewById(R.id.signal_level),
                 (ImageView) res.findViewById(R.id.signal_level_img),
-                (TextView) res.findViewById(R.id.phone_data));
+                (TextView) res.findViewById(R.id.phone_data),
+                dataHolder, mHost.getResources());
         return res;
     }
 

@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModel;
 import android.content.res.Resources;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
@@ -243,7 +245,7 @@ public class StatusViewModel extends ViewModel {
     public void startListeners(final TextView callStateView, final TextView connectionStateView,
                                final TextView serviceStateView, final TextView cellLocationView,
                                final TextView phoneLocationView, final TextView signalView,
-                               final ImageView signalImage, final TextView dataView) {
+                               final ImageView signalImage, final TextView dataView, View v, Resources resources) {
         int event = PhoneStateListener.LISTEN_DATA_ACTIVITY |
                 PhoneStateListener.LISTEN_CALL_STATE |
                 PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR |
@@ -343,6 +345,14 @@ public class StatusViewModel extends ViewModel {
 
         };
         tm.listen(listener, event);
+
+
+        LocationListener locationListener = new MyLocationListener(v, resources);
+        try {
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
+        } catch (SecurityException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void measure(int signal, Location location) {
@@ -355,5 +365,49 @@ public class StatusViewModel extends ViewModel {
         return measuredData.toString();
     }
 
+    private class MyLocationListener implements LocationListener {
 
+        private View v;
+        private Resources resources;
+
+        public MyLocationListener(View v, Resources resources) {
+            super();
+            this.v = v;
+            this.resources = resources;
+        }
+
+        @Override
+        public void onLocationChanged(Location loc) {
+            updateView(v, resources);
+            Integer dbm = 0;
+            try {
+                List<CellInfo> cellInfoList = tm.getAllCellInfo();
+                for (CellInfo cellInfo : cellInfoList) {
+                    if (cellInfo instanceof CellInfoLte) {
+                        dbm = ((CellInfoLte) cellInfo).getCellSignalStrength().getDbm();
+                        break;
+                    } else if (cellInfo instanceof CellInfoGsm) {
+                        dbm = ((CellInfoGsm) cellInfo).getCellSignalStrength().getDbm();
+                        break;
+                    }
+                }
+                measure(dbm, loc);
+            } catch (SecurityException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+    }
 }
