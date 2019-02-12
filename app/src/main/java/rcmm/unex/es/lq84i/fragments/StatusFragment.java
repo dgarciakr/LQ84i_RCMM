@@ -3,6 +3,7 @@ package rcmm.unex.es.lq84i.fragments;
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,7 +43,9 @@ public class StatusFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mHost = getActivity();
         StatusViewModelFactory factory = new StatusViewModelFactory((TelephonyManager)
-                Objects.requireNonNull(mHost).getSystemService(Context.TELEPHONY_SERVICE));
+                Objects.requireNonNull(mHost).getSystemService(Context.TELEPHONY_SERVICE),
+                (LocationManager)
+                        Objects.requireNonNull(mHost.getSystemService(Context.LOCATION_SERVICE)));
         viewModel = ViewModelProviders.of(this, factory).get(StatusViewModel.class);
     }
 

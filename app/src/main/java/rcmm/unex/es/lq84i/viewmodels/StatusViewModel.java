@@ -3,11 +3,23 @@ package rcmm.unex.es.lq84i.viewmodels;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModel;
 import android.content.res.Resources;
+import android.location.Location;
+import android.location.LocationManager;
+import android.telephony.CellInfo;
+import android.telephony.CellInfoGsm;
+import android.telephony.CellInfoLte;
+import android.telephony.CellLocation;
+import android.telephony.CellSignalStrengthGsm;
+import android.telephony.CellSignalStrengthLte;
+import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -41,9 +53,24 @@ public class StatusViewModel extends ViewModel {
      */
     private TelephonyManager tm;
 
-    public StatusViewModel(TelephonyManager tm) {
+    /**
+     * Datos tomados mediante mediciones
+     */
+    private StringBuffer measuredData;
+
+    /**
+     * Gestor de localización mediante GPS
+     */
+    private LocationManager lm;
+
+    private static final String CSVHEADER = "latitude;longitude;altitude;RSRP";
+
+    public StatusViewModel(TelephonyManager tm, LocationManager lm) {
         data = new LinkedHashMap<>();
         this.tm = tm;
+        this.lm = lm;
+        measuredData = new StringBuffer();
+        measuredData.append(CSVHEADER);
         initializeBaseData();
         updateData();
     }
@@ -168,5 +195,147 @@ public class StatusViewModel extends ViewModel {
         networkSubtypeData.put(TelephonyManager.NETWORK_TYPE_UMTS, "UMTS");
         networkTypeData.put(TelephonyManager.NETWORK_TYPE_UNKNOWN, unknown);
         networkSubtypeData.put(TelephonyManager.NETWORK_TYPE_UNKNOWN, "???");
+    }
+
+    public void startListeners(final TextView callStateView, final TextView connectionStateView,
+                               final TextView serviceStateView, final TextView cellLocationView,
+                               final TextView phoneLocationView, final TextView signalView,
+                               final ImageView signalImage, final TextView dataView) {
+        int event = PhoneStateListener.LISTEN_DATA_ACTIVITY |
+                PhoneStateListener.LISTEN_CALL_STATE |
+                PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR |
+                PhoneStateListener.LISTEN_DATA_CONNECTION_STATE |
+                PhoneStateListener.LISTEN_SERVICE_STATE;
+        //|PhoneStateListener.LISTEN_CELL_LOCATION;
+
+        PhoneStateListener listener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String phoneNumber) {
+                String phoneState = "???";
+                switch (state) {
+                    case TelephonyManager.CALL_STATE_IDLE:
+                        phoneState = "Libre";
+                        break;
+                    case TelephonyManager.CALL_STATE_RINGING:
+                        phoneState = "Sonando";
+                        break;
+                    case TelephonyManager.CALL_STATE_OFFHOOK:
+                        phoneState = "Llamada activa";
+                        break;
+                }
+                callStateView.setText(phoneState);
+                super.onCallStateChanged(state, phoneNumber);
+            }
+
+            @Override
+            public void onServiceStateChanged(ServiceState serviceState) {
+                String state = "???";
+                switch (serviceState.getState()) {
+                    case ServiceState.STATE_IN_SERVICE:
+                        state = "En servicio";
+                        break;
+                    case ServiceState.STATE_OUT_OF_SERVICE:
+                        state = "Fuera de servicio";
+                        break;
+                    case ServiceState.STATE_EMERGENCY_ONLY:
+                        state = "Solo emergencias";
+                        break;
+                    case ServiceState.STATE_POWER_OFF:
+                        state = "Apagado";
+                        break;
+                }
+                serviceStateView.setText(state);
+                super.onServiceStateChanged(serviceState);
+            }
+
+            @Override
+            public void onCellLocationChanged(CellLocation location) {
+                //TODO Cuando ya tengamos el mapa de calor
+                //TODO Toca parsear a una de sus subclases
+                super.onCellLocationChanged(location);
+            }
+
+            @Override
+            public void onDataConnectionStateChanged(int state) {
+                String dataState = "???";
+                switch (state) {
+                    case TelephonyManager.DATA_ACTIVITY_NONE:
+                        dataState = "Ninguna";
+                        break;
+                    case TelephonyManager.DATA_ACTIVITY_IN:
+                        dataState = "E";
+                        break;
+                    case TelephonyManager.DATA_ACTIVITY_OUT:
+                        dataState = "S";
+                        break;
+                    case TelephonyManager.DATA_ACTIVITY_INOUT:
+                        dataState = "E/S";
+                        break;
+                    case TelephonyManager.DATA_ACTIVITY_DORMANT:
+                        dataState = "Latente";
+                        break;
+                }
+                dataView.setText(dataState);
+                super.onDataConnectionStateChanged(state);
+            }
+
+            @Override
+            public void onCellInfoChanged(List<CellInfo> cellInfo) {
+                switch (tm.getNetworkType()) {
+                    case TelephonyManager.NETWORK_TYPE_GSM:
+                        CellSignalStrengthGsm strGsm = ((CellInfoGsm) cellInfo.get(0)).
+                                getCellSignalStrength();
+                        Integer dbmGsm = strGsm.getDbm();
+                        signalView.setText(dbmGsm.toString());
+                        switch (strGsm.getLevel()) {
+                            case 0:
+                                //TODO
+                                break;
+                            case 1:
+                                //TODO
+                                break;
+                            case 2:
+                                //TODO
+                                break;
+                            case 3:
+                                //TODO
+                                break;
+                            case 4:
+                                //TODO
+                                break;
+                        }
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_LTE:
+                        CellSignalStrengthLte strLte = ((CellInfoLte) cellInfo.get(0)).
+                                getCellSignalStrength();
+                        Integer dbmLte = strLte.getDbm();
+                        signalView.setText(dbmLte.toString());
+                        switch (strLte.getLevel()) {
+                            case 0:
+                                //TODO
+                                break;
+                            case 1:
+                                //TODO
+                                break;
+                            case 2:
+                                //TODO
+                                break;
+                            case 3:
+                                //TODO
+                                break;
+                            case 4:
+                                //TODO
+                                break;
+                        }
+                        break;
+                }
+                super.onCellInfoChanged(cellInfo);
+            }
+        };
+        tm.listen(listener, event);
+    }
+
+    private void measure(int signal, Location location) {
+
     }
 }
