@@ -6,6 +6,7 @@
     <string name="conectionState">Estado de la conexión: </string>
     <string name="serviceState">Estado del servicio: </string>
     <string name="gps_location">Localización GPS: </string>
+    <string name="cell_location">Localización celda: </string>
     <string name="signal_level">Nivel de Señal: </string>
     <string name="data">Datos: </string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

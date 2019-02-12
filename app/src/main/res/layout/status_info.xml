@@ -91,6 +91,13 @@
             android:text="@string/serviceState" />
 
         <TextView
+            android:id="@+id/cell_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/cell_location" />
+
+        <TextView
             android:id="@+id/gps_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

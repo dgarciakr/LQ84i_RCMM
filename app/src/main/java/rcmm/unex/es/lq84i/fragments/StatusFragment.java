@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.Objects;
 
@@ -76,6 +78,14 @@ public class StatusFragment extends Fragment {
                 }
             }
         });
+        viewModel.startListeners((TextView) res.findViewById(R.id.call_state),
+                (TextView) res.findViewById(R.id.conextion_state),
+                (TextView) res.findViewById(R.id.service_state),
+                (TextView) res.findViewById(R.id.cell_location),
+                (TextView) res.findViewById(R.id.gps_location),
+                (TextView) res.findViewById(R.id.signal_level),
+                (ImageView) res.findViewById(R.id.signal_level_img),
+                (TextView) res.findViewById(R.id.phone_data));
         return res;
     }
 

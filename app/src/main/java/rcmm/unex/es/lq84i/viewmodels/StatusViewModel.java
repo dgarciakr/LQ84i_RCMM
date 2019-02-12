@@ -26,6 +26,12 @@ import java.util.Objects;
 import rcmm.unex.es.lq84i.R;
 import rcmm.unex.es.lq84i.utility.CSVTool;
 
+import static rcmm.unex.es.lq84i.R.drawable.level0signal;
+import static rcmm.unex.es.lq84i.R.drawable.level1signal;
+import static rcmm.unex.es.lq84i.R.drawable.level2signal;
+import static rcmm.unex.es.lq84i.R.drawable.level3signal;
+import static rcmm.unex.es.lq84i.R.drawable.level4signal;
+
 public class StatusViewModel extends ViewModel {
 
     /**
@@ -289,19 +295,19 @@ public class StatusViewModel extends ViewModel {
                         signalView.setText(dbmGsm.toString());
                         switch (strGsm.getLevel()) {
                             case 0:
-                                //TODO
+                                signalImage.setImageResource(level0signal);
                                 break;
                             case 1:
-                                //TODO
+                                signalImage.setImageResource(level1signal);
                                 break;
                             case 2:
-                                //TODO
+                                signalImage.setImageResource(level2signal);
                                 break;
                             case 3:
-                                //TODO
+                                signalImage.setImageResource(level3signal);
                                 break;
                             case 4:
-                                //TODO
+                                signalImage.setImageResource(level4signal);
                                 break;
                         }
                         break;
@@ -312,19 +318,19 @@ public class StatusViewModel extends ViewModel {
                         signalView.setText(dbmLte.toString());
                         switch (strLte.getLevel()) {
                             case 0:
-                                //TODO
+                                signalImage.setImageResource(level0signal);
                                 break;
                             case 1:
-                                //TODO
+                                signalImage.setImageResource(level1signal);
                                 break;
                             case 2:
-                                //TODO
+                                signalImage.setImageResource(level2signal);
                                 break;
                             case 3:
-                                //TODO
+                                signalImage.setImageResource(level3signal);
                                 break;
                             case 4:
-                                //TODO
+                                signalImage.setImageResource(level4signal);
                                 break;
                         }
                         break;
