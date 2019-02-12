@@ -59,21 +59,22 @@ public class StatusViewModel extends ViewModel {
         TextView currView;
         //TODO Sustituir todos los currView.getText().toString() por resources.getString(R.string.ID). El ID es el mismo nombre que el del R.id para el findViewByID en cada caso
         currView = v.findViewById(R.id.device_id);
-        currView.setText(currView.getText().toString() + data.get(0));
+        currView.setText(resources.getString(R.string.device_id) + data.get(0));
         currView = v.findViewById(R.id.phone_num);
-        currView.setText(currView.getText().toString() + data.get(1));
+        currView.setText(resources.getString(R.string.phone_num) + data.get(1));
         currView = v.findViewById(R.id.software_ver);
-        currView.setText(currView.getText().toString() + data.get(2));
+        currView.setText(resources.getString(R.string.software_ver) + data.get(2));
         currView = v.findViewById(R.id.op_name);
-        currView.setText(currView.getText().toString() + data.get(3));
+        currView.setText(resources.getString(R.string.op_name) + data.get(3));
         currView = v.findViewById(R.id.sim_op);
-        currView.setText(currView.getText().toString() + data.get(4));
+        currView.setText(resources.getString(R.string.sim_op) + data.get(4));
         currView = v.findViewById(R.id.sub_id);
-        currView.setText(currView.getText().toString() + data.get(5));
+        currView.setText(resources.getString(R.string.sub_id) + data.get(5));
         currView = v.findViewById(R.id.network_type);
-        currView.setText(currView.getText().toString() + data.get(6));
+        currView.setText(resources.getString(R.string.network_type) + data.get(6));
         currView = v.findViewById(R.id.voice_radio_type);
-        currView.setText(currView.getText().toString() + data.get(7));
+        currView.setText(resources.getString(R.string.voice_radio_type) + data.get(7));
+
     }
 
     public boolean saveData() {
