@@ -69,7 +69,7 @@ public class StatusViewModel extends ViewModel {
      */
     private LocationManager lm;
 
-    private static final String CSVHEADER = "latitude;longitude;altitude;RSRP";
+    private static final String CSVHEADER = "latitude;longitude;altitude;RSRP\n";
 
     public StatusViewModel(TelephonyManager tm, LocationManager lm) {
         data = new LinkedHashMap<>();
@@ -361,6 +361,14 @@ public class StatusViewModel extends ViewModel {
     }
 
     private void measure(int signal, Location location) {
-
+        String format = location.getLatitude() + ";" + location.getLongitude() + ";" + location.getAltitude()
+                + ";" + signal + "\n";
+        measuredData.append(format);
     }
+
+    public String getMeasuredData() {
+        return measuredData.toString();
+    }
+
+
 }
