@@ -9,8 +9,6 @@ import android.telephony.CellInfo;
 import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
 import android.telephony.CellLocation;
-import android.telephony.CellSignalStrengthGsm;
-import android.telephony.CellSignalStrengthLte;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
@@ -90,6 +88,7 @@ public class StatusViewModel extends ViewModel {
     @SuppressLint("SetTextI18n")
     public void updateView(View v, Resources resources) {
         TextView currView;
+        updateData();
         //TODO Sustituir todos los currView.getText().toString() por resources.getString(R.string.ID). El ID es el mismo nombre que el del R.id para el findViewByID en cada caso
         currView = v.findViewById(R.id.device_id);
         currView.setText(resources.getString(R.string.device_id) + data.get(0));
@@ -107,7 +106,27 @@ public class StatusViewModel extends ViewModel {
         currView.setText(resources.getString(R.string.network_type) + data.get(6));
         currView = v.findViewById(R.id.voice_radio_type);
         currView.setText(resources.getString(R.string.voice_radio_type) + data.get(7));
-
+        currView = v.findViewById(R.id.signal_level);
+        currView.setText(resources.getString(R.string.signal_level) + data.get(8));
+        ImageView signalImage = v.findViewById(R.id.signal_level_img);
+        Integer level = Integer.parseInt(data.get(9));
+        switch (level) {
+            case 0:
+                signalImage.setImageResource(level0signal);
+                break;
+            case 1:
+                signalImage.setImageResource(level1signal);
+                break;
+            case 2:
+                signalImage.setImageResource(level2signal);
+                break;
+            case 3:
+                signalImage.setImageResource(level3signal);
+                break;
+            case 4:
+                signalImage.setImageResource(level4signal);
+                break;
+        }
     }
 
     public boolean saveData() {
@@ -145,6 +164,24 @@ public class StatusViewModel extends ViewModel {
             Integer voiceNetworkType = tm.getVoiceNetworkType();
             data.put(7, networkTypeData.get(voiceNetworkType) +
                     " (" + networkSubtypeData.get(voiceNetworkType) + ")");
+            List<CellInfo> cellInfoList = tm.getAllCellInfo();
+            for (CellInfo cellInfo : cellInfoList) {
+                if (cellInfo instanceof CellInfoLte) {
+                    Integer dbm = ((CellInfoLte) cellInfo).getCellSignalStrength().getDbm();
+                    Integer level = ((CellInfoLte) cellInfo).getCellSignalStrength().getLevel();
+                    data.put(8, dbm.toString());
+                    data.put(9, level.toString());
+                    break;
+                } else {
+                    if (cellInfo instanceof CellInfoGsm) {
+                        Integer dbm = ((CellInfoGsm) cellInfo).getCellSignalStrength().getDbm();
+                        Integer level = ((CellInfoGsm) cellInfo).getCellSignalStrength().getLevel();
+                        data.put(8, dbm.toString());
+                        data.put(9, level.toString());
+                        break;
+                    }
+                }
+            }
         } catch (SecurityException ex) {
             for (int i = 0; i < FIELDS; i++) {
                 data.put(i, "Permiso requerido");
@@ -304,58 +341,6 @@ public class StatusViewModel extends ViewModel {
                 super.onDataConnectionStateChanged(state);
             }
 
-            @Override
-            public void onCellInfoChanged(List<CellInfo> cellInfo) {
-                switch (tm.getNetworkType()) {
-                    case TelephonyManager.NETWORK_TYPE_GSM:
-                        CellSignalStrengthGsm strGsm = ((CellInfoGsm) cellInfo.get(0)).
-                                getCellSignalStrength();
-                        Integer dbmGsm = strGsm.getDbm();
-                        signalView.setText(dbmGsm.toString());
-                        switch (strGsm.getLevel()) {
-                            case 0:
-                                signalImage.setImageResource(level0signal);
-                                break;
-                            case 1:
-                                signalImage.setImageResource(level1signal);
-                                break;
-                            case 2:
-                                signalImage.setImageResource(level2signal);
-                                break;
-                            case 3:
-                                signalImage.setImageResource(level3signal);
-                                break;
-                            case 4:
-                                signalImage.setImageResource(level4signal);
-                                break;
-                        }
-                        break;
-                    case TelephonyManager.NETWORK_TYPE_LTE:
-                        CellSignalStrengthLte strLte = ((CellInfoLte) cellInfo.get(0)).
-                                getCellSignalStrength();
-                        Integer dbmLte = strLte.getDbm();
-                        signalView.setText(dbmLte.toString());
-                        switch (strLte.getLevel()) {
-                            case 0:
-                                signalImage.setImageResource(level0signal);
-                                break;
-                            case 1:
-                                signalImage.setImageResource(level1signal);
-                                break;
-                            case 2:
-                                signalImage.setImageResource(level2signal);
-                                break;
-                            case 3:
-                                signalImage.setImageResource(level3signal);
-                                break;
-                            case 4:
-                                signalImage.setImageResource(level4signal);
-                                break;
-                        }
-                        break;
-                }
-                super.onCellInfoChanged(cellInfo);
-            }
         };
         tm.listen(listener, event);
     }
