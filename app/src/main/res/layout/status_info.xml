@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -67,6 +68,54 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/voice_radio_type" />
+
+        <TextView
+            android:id="@+id/call_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/callState" />
+
+        <TextView
+            android:id="@+id/conextion_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/conectionState" />
+
+        <TextView
+            android:id="@+id/service_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/serviceState" />
+
+        <TextView
+            android:id="@+id/gps_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/gps_location" />
+
+        <TextView
+            android:id="@+id/signal_level"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/signal_level" />
+
+        <ImageView
+            android:id="@+id/signal_level_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/phone_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/data" />
     </LinearLayout>
 
     <Button

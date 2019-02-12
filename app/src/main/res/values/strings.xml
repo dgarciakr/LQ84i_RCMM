@@ -2,6 +2,12 @@
     <string name="app_name">LQ84i</string>
     <string name="acerca_de">Acerca de</string>
     <string name="settings">Configuración</string>
+    <string name="callState">Estado de la llamada: </string>
+    <string name="conectionState">Estado de la conexión: </string>
+    <string name="serviceState">Estado del servicio: </string>
+    <string name="gps_location">Localización GPS: </string>
+    <string name="signal_level">Nivel de Señal: </string>
+    <string name="data">Datos: </string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
