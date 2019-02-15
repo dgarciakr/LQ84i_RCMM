@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import rcmm.unex.es.lq84i.R;
-import rcmm.unex.es.lq84i.utility.CSVTool;
+import rcmm.unex.es.lq84i.interfaces.DataSharer;
 
 import static rcmm.unex.es.lq84i.R.drawable.level0signal;
 import static rcmm.unex.es.lq84i.R.drawable.level1signal;
@@ -38,6 +38,11 @@ public class StatusViewModel extends ViewModel {
      * Número de campos a mostrar
      */
     private static final Integer FIELDS = 8;
+
+    /**
+     * Tiempo entre actualizaciones del listener por tiempo
+     */
+    private static final Integer UPDATE_TIME = 5000;
 
     /**
      * Datos a recoger y mostrar
@@ -91,7 +96,6 @@ public class StatusViewModel extends ViewModel {
     public void updateView(View v, Resources resources) {
         TextView currView;
         updateData();
-        //TODO Sustituir todos los currView.getText().toString() por resources.getString(R.string.ID). El ID es el mismo nombre que el del R.id para el findViewByID en cada caso
         currView = v.findViewById(R.id.device_id);
         currView.setText(resources.getString(R.string.device_id) + data.get(0));
         currView = v.findViewById(R.id.phone_num);
@@ -129,17 +133,6 @@ public class StatusViewModel extends ViewModel {
                 signalImage.setImageResource(level4signal);
                 break;
         }
-    }
-
-    public boolean saveData() {
-        updateData();
-        String[] ids = {"device_id", "phone_num", "software_ver", "op_name", "sim_op", "sub_id",
-                "network_type", "voice_radio_type"};
-        Map<String, String> content = new LinkedHashMap<>();
-        for (int i = 0; i < FIELDS; i++) {
-            content.put(ids[i], Objects.requireNonNull(data.get(i)));
-        }
-        return CSVTool.saveAsCSV("data.csv", content);
     }
 
     /**
@@ -349,7 +342,8 @@ public class StatusViewModel extends ViewModel {
 
         LocationListener locationListener = new MyLocationListener(v, resources);
         try {
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_TIME, 0,
+                    locationListener);
         } catch (SecurityException ex) {
             ex.printStackTrace();
         }
@@ -361,8 +355,8 @@ public class StatusViewModel extends ViewModel {
         measuredData.append(format);
     }
 
-    public String getMeasuredData() {
-        return measuredData.toString();
+    public void sendMeasuredData(DataSharer sharer) {
+        sharer.shareText(measuredData.toString());
     }
 
     private class MyLocationListener implements LocationListener {

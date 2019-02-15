@@ -1,5 +1,6 @@
 package rcmm.unex.es.lq84i.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,9 +13,10 @@ import android.view.MenuItem;
 
 import rcmm.unex.es.lq84i.R;
 import rcmm.unex.es.lq84i.fragments.StatusFragment;
+import rcmm.unex.es.lq84i.interfaces.DataSharer;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DataSharer {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,5 +75,17 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void shareText(String text) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 }

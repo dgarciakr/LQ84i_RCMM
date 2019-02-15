@@ -20,6 +20,7 @@ import android.widget.TextView;
 import java.util.Objects;
 
 import rcmm.unex.es.lq84i.R;
+import rcmm.unex.es.lq84i.interfaces.DataSharer;
 import rcmm.unex.es.lq84i.viewmodels.StatusViewModel;
 import rcmm.unex.es.lq84i.viewmodels.factories.StatusViewModelFactory;
 
@@ -67,15 +68,10 @@ public class StatusFragment extends Fragment {
         s.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (viewModel.saveData()) {
-                    Snackbar.make(Objects.requireNonNull(mHost.getCurrentFocus()),
-                            mHost.getResources().getString(R.string.data_saved),
-                            Snackbar.LENGTH_LONG);
-                } else {
-                    Snackbar.make(Objects.requireNonNull(mHost.getCurrentFocus()),
-                            mHost.getResources().getString(R.string.error_saving),
-                            Snackbar.LENGTH_LONG);
-                }
+                viewModel.sendMeasuredData((DataSharer) mHost);
+                Snackbar.make(Objects.requireNonNull(mHost.getCurrentFocus()),
+                        mHost.getResources().getString(R.string.data_saved),
+                        Snackbar.LENGTH_LONG);
             }
         });
         viewModel.startListeners((TextView) res.findViewById(R.id.call_state),
