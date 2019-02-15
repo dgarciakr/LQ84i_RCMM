@@ -14,6 +14,7 @@ import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
+import android.telephony.gsm.GsmCellLocation;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -74,7 +75,8 @@ public class StatusViewModel extends ViewModel {
      */
     private LocationManager lm;
 
-    private static final String CSVHEADER = "latitude;longitude;altitude;RSRP\n";
+    private static final String CSVHEADER =
+            "latitude;longitude;altitude;MCC;MNC;CID;LAC;RSRP;type;subtype\n";
 
     public StatusViewModel(TelephonyManager tm, LocationManager lm) {
         data = new LinkedHashMap<>();
@@ -350,9 +352,22 @@ public class StatusViewModel extends ViewModel {
     }
 
     private void measure(int signal, Location location) {
-        String format = location.getLatitude() + ";" + location.getLongitude() + ";" + location.getAltitude()
-                + ";" + signal + "\n";
-        measuredData.append(format);
+        try {
+            String mcc = tm.getNetworkOperator().substring(0, 3);
+            String mnc = tm.getNetworkOperator().substring(3);
+            GsmCellLocation cellLocation = (GsmCellLocation) tm.getCellLocation();
+            String cid = Integer.toHexString(cellLocation.getCid());
+            String lac = Integer.toHexString(cellLocation.getLac());
+            String type = networkTypeData.get(tm.getVoiceNetworkType());
+            String subtype = networkSubtypeData.get(tm.getVoiceNetworkType());
+
+            String format = location.getLatitude() + ";" + location.getLongitude() + ";" + location.getAltitude()
+                    + ";" + mcc + ";" + mnc + ";" + cid + ";" + lac + ";" + signal + ";" + type
+                    + ";" + subtype + "\n";
+            measuredData.append(format);
+        } catch (SecurityException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void sendMeasuredData(DataSharer sharer) {
