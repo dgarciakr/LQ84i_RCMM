@@ -45,6 +45,12 @@ public class StatusViewModel extends ViewModel {
      */
     private static final Integer UPDATE_TIME = 500;
 
+
+    /*
+     * Distancia entre actualizaciones
+     */
+    private static final float UPDATE_DISTANCE = (float) 0.5;
+
     /**
      * Datos a recoger y mostrar
      */
@@ -353,6 +359,15 @@ public class StatusViewModel extends ViewModel {
         } catch (SecurityException ex) {
             ex.printStackTrace();
         }
+
+        LocationListener positionListener = new MyLocationListener(v, resources);
+        try {
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, UPDATE_DISTANCE,
+                    locationListener);
+        } catch (SecurityException ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     private void measure(int signal, Location location) {
