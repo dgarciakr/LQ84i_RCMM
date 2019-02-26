@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_settings) {
             android.app.FragmentTransaction transact = getFragmentManager().beginTransaction();
             transact.replace(R.id.frag_container, new PreferenceFrag()).addToBackStack(null);
+            transact.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
