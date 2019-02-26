@@ -52,11 +52,6 @@ public class StatusViewModel extends ViewModel {
     private static final float UPDATE_DISTANCE = (float) 0.5;
 
     /**
-     * Distancia entre actualizaciones
-     */
-    private static final float UPDATE_DISTANCE = (float) 0.5;
-
-    /**
      * Datos a recoger y mostrar
      */
     private Map<Integer, String> data;
