@@ -43,7 +43,7 @@ public class StatusViewModel extends ViewModel {
     /**
      * Tiempo entre actualizaciones del listener por tiempo
      */
-    private static final Integer UPDATE_TIME = 5000;
+    private static final Integer UPDATE_TIME = 500;
 
     /**
      * Datos a recoger y mostrar
@@ -74,9 +74,10 @@ public class StatusViewModel extends ViewModel {
      * Gestor de localización mediante GPS
      */
     private LocationManager lm;
-
     private static final String CSVHEADER =
             "latitude;longitude;altitude;MCC;MNC;CID;LAC;RSRP;type;subtype\n";
+    private static Location location;
+
 
     public StatusViewModel(TelephonyManager tm, LocationManager lm) {
         data = new LinkedHashMap<>();
@@ -114,6 +115,9 @@ public class StatusViewModel extends ViewModel {
         currView.setText(resources.getString(R.string.network_type) + data.get(6));
         currView = v.findViewById(R.id.voice_radio_type);
         currView.setText(resources.getString(R.string.voice_radio_type) + data.get(7));
+        currView = v.findViewById(R.id.gps_location);
+        if (location != null)
+            currView.setText(location.getLatitude() + " " + location.getLongitude());
         currView = v.findViewById(R.id.signal_level);
         currView.setText(resources.getString(R.string.signal_level) + data.get(8));
         ImageView signalImage = v.findViewById(R.id.signal_level_img);
@@ -387,6 +391,7 @@ public class StatusViewModel extends ViewModel {
 
         @Override
         public void onLocationChanged(Location loc) {
+            location = loc;
             updateView(v, resources);
             Integer dbm = 0;
             try {
