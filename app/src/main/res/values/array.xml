@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="options">
+        <item>Tiempo</item>
+        <item>Distancia</item>
+    </string-array>
+    <string-array name="optionValues">
+        <item>time</item>
+        <item>space</item>
+    </string-array>
+</resources>

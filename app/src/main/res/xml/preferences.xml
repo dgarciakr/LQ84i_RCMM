@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="time"
+        android:entries="@array/options"
+        android:entryValues="@array/optionValues"
+        android:key="listener_type"
+        android:summary="@string/listener_pref_desc"
+        android:title="@string/listener_pref" />
+</PreferenceScreen>

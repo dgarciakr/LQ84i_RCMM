@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import rcmm.unex.es.lq84i.R;
+import rcmm.unex.es.lq84i.fragments.PreferenceFrag;
 import rcmm.unex.es.lq84i.fragments.StatusFragment;
 import rcmm.unex.es.lq84i.interfaces.DataSharer;
 
@@ -70,7 +71,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        //Introducir opciones
+        int id = item.getItemId();
+
+        if (id == R.id.nav_settings) {
+            android.app.FragmentTransaction transact = getFragmentManager().beginTransaction();
+            transact.replace(R.id.frag_container, new PreferenceFrag()).addToBackStack(null);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

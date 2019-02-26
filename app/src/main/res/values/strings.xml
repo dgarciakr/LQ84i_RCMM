@@ -29,4 +29,6 @@
     <string name="save_as_csv">Guardar como CSV</string>
     <string name="data_saved">¡Datos guardados con éxito!</string>
     <string name="error_saving">No se pudo guardar</string>
+    <string name="listener_pref">Variación de medición</string>
+    <string name="listener_pref_desc">Elige con las variaciones de qué se realizan mediciones (requiere reinicio)</string>
 </resources>

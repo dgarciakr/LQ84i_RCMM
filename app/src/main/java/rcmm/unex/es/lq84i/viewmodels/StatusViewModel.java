@@ -46,6 +46,11 @@ public class StatusViewModel extends ViewModel {
     private static final Integer UPDATE_TIME = 500;
 
     /**
+     * Distancia entre actualizaciones
+     */
+    private static final float UPDATE_DISTANCE = (float) 0.5;
+
+    /**
      * Datos a recoger y mostrar
      */
     private Map<Integer, String> data;
@@ -71,6 +76,11 @@ public class StatusViewModel extends ViewModel {
     private StringBuffer measuredData;
 
     /**
+     * Decide si el listener a utilizar funciona por tiempo o por distancia
+     */
+    private boolean time;
+
+    /**
      * Gestor de localización mediante GPS
      */
     private LocationManager lm;
@@ -79,12 +89,13 @@ public class StatusViewModel extends ViewModel {
     private static Location location;
 
 
-    public StatusViewModel(TelephonyManager tm, LocationManager lm) {
+    public StatusViewModel(TelephonyManager tm, LocationManager lm, boolean time) {
         data = new LinkedHashMap<>();
         this.tm = tm;
         this.lm = lm;
         measuredData = new StringBuffer();
         measuredData.append(CSVHEADER);
+        this.time = time;
         initializeBaseData();
         updateData();
     }
@@ -347,11 +358,20 @@ public class StatusViewModel extends ViewModel {
 
 
         LocationListener locationListener = new MyLocationListener(v, resources);
-        try {
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_TIME, 0,
-                    locationListener);
-        } catch (SecurityException ex) {
-            ex.printStackTrace();
+        if (time) {
+            try {
+                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_TIME, 0,
+                        locationListener);
+            } catch (SecurityException ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            try {
+                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, UPDATE_DISTANCE,
+                        locationListener);
+            } catch (SecurityException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 

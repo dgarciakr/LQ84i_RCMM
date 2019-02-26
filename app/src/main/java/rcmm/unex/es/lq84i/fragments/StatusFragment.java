@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -45,10 +46,13 @@ public class StatusFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHost = getActivity();
+        PreferenceManager.setDefaultValues(mHost, R.xml.preferences, false);
+        String pref = PreferenceManager.getDefaultSharedPreferences(mHost).getString(PreferenceFrag.KEY_LISTENER_PREFERENCE, "time");
+        boolean time = pref.equals("time");
         StatusViewModelFactory factory = new StatusViewModelFactory((TelephonyManager)
                 Objects.requireNonNull(mHost).getSystemService(Context.TELEPHONY_SERVICE),
                 (LocationManager)
-                        Objects.requireNonNull(mHost.getSystemService(Context.LOCATION_SERVICE)));
+                        Objects.requireNonNull(mHost.getSystemService(Context.LOCATION_SERVICE)), time);
         viewModel = ViewModelProviders.of(this, factory).get(StatusViewModel.class);
     }
 
