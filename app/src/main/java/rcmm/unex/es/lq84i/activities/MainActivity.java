@@ -1,8 +1,9 @@
 package rcmm.unex.es.lq84i.activities;
 
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
