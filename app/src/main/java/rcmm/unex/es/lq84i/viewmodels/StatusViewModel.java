@@ -58,6 +58,10 @@ public class StatusViewModel extends ViewModel {
      */
     private static final Integer UPDATE_TIME = 500;
 
+    /**
+     * UID del proceso
+     */
+    private int uid = android.os.Process.myUid();
 
     /*
      * Distancia entre actualizaciones
@@ -414,6 +418,15 @@ public class StatusViewModel extends ViewModel {
             ex.printStackTrace();
         }
     }
+//
+//    public void uplinkCalculate(){
+//
+//
+//
+//        long bytes = TrafficStats.getUidTxBytes(uid); //Método que calcula los bytes que transmite el proceso desde que se inicia.
+//
+//        Log.i("testeo", "Los bytes que se han transmitido son: " + bytes);
+//    }
 
     public void sendMeasuredData(DataSharer sharer) {
         sharer.shareData(output.getOutputFile((Context) sharer));
