@@ -1,7 +1,9 @@
 package rcmm.unex.es.lq84i.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -11,6 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.io.File;
+import java.net.URLConnection;
 
 import rcmm.unex.es.lq84i.R;
 import rcmm.unex.es.lq84i.fragments.PreferenceFrag;
@@ -23,6 +28,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,7 +75,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
@@ -86,14 +92,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void shareText(String text) {
+    public void shareData(File data) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, text);
-
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
+        intent.setType(URLConnection.guessContentTypeFromName(data.getName()));
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + data.getAbsolutePath()));
+        startActivity(Intent.createChooser(intent, "Enviar CSV mediante"));
     }
 }

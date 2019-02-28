@@ -2,6 +2,7 @@ package rcmm.unex.es.lq84i.viewmodels;
 
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
 import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,6 +16,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import java.util.Objects;
 
 import rcmm.unex.es.lq84i.R;
 import rcmm.unex.es.lq84i.interfaces.DataSharer;
+import rcmm.unex.es.lq84i.utility.FileIO;
 
 import static rcmm.unex.es.lq84i.R.drawable.level0signal;
 import static rcmm.unex.es.lq84i.R.drawable.level1signal;
@@ -39,6 +42,16 @@ public class StatusViewModel extends ViewModel {
      * Número de campos a mostrar
      */
     private static final Integer FIELDS = 8;
+
+    /**
+     * Archivo de mediciones
+     */
+    private FileIO output;
+
+    /**
+     * Nombre del archivo de mediciones
+     */
+    private static final String FILENAME = "measures.csv";
 
     /**
      * Tiempo entre actualizaciones del listener por tiempo
@@ -72,11 +85,6 @@ public class StatusViewModel extends ViewModel {
     private TelephonyManager tm;
 
     /**
-     * Datos tomados mediante mediciones
-     */
-    private StringBuffer measuredData;
-
-    /**
      * Decide si el listener a utilizar funciona por tiempo o por distancia
      */
     private boolean time;
@@ -90,13 +98,13 @@ public class StatusViewModel extends ViewModel {
     private static Location location;
 
 
-    public StatusViewModel(TelephonyManager tm, LocationManager lm, boolean time) {
+    public StatusViewModel(TelephonyManager tm, LocationManager lm, boolean time, Context context) {
         data = new LinkedHashMap<>();
         this.tm = tm;
         this.lm = lm;
-        measuredData = new StringBuffer();
-        measuredData.append(CSVHEADER);
         this.time = time;
+        output = new FileIO(FILENAME, context);
+        output.saveData(CSVHEADER);
         initializeBaseData();
         updateData();
     }
@@ -398,14 +406,17 @@ public class StatusViewModel extends ViewModel {
             String format = location.getLatitude() + ";" + location.getLongitude() + ";" + location.getAltitude()
                     + ";" + mcc + ";" + mnc + ";" + cid + ";" + lac + ";" + signal + ";" + type
                     + ";" + subtype + "\n";
-            measuredData.append(format);
+
+            if (!output.saveData(format)) {
+                Log.e("Measure", "No se pudieron guardar los datos");
+            }
         } catch (SecurityException ex) {
             ex.printStackTrace();
         }
     }
 
     public void sendMeasuredData(DataSharer sharer) {
-        sharer.shareText(measuredData.toString());
+        sharer.shareData(output.getOutputFile((Context) sharer));
     }
 
     private class MyLocationListener implements LocationListener {
@@ -453,5 +464,11 @@ public class StatusViewModel extends ViewModel {
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
 
+    }
+
+    @Override
+    protected void onCleared() {
+        output.end();
+        super.onCleared();
     }
 }

@@ -52,7 +52,7 @@ public class StatusFragment extends Fragment {
         StatusViewModelFactory factory = new StatusViewModelFactory((TelephonyManager)
                 Objects.requireNonNull(mHost).getSystemService(Context.TELEPHONY_SERVICE),
                 (LocationManager)
-                        Objects.requireNonNull(mHost.getSystemService(Context.LOCATION_SERVICE)), time);
+                        Objects.requireNonNull(mHost.getSystemService(Context.LOCATION_SERVICE)), time, mHost);
         viewModel = ViewModelProviders.of(this, factory).get(StatusViewModel.class);
     }
 
