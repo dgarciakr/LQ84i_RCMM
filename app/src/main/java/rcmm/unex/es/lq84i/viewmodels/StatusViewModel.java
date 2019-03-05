@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoGsm;
@@ -146,22 +147,24 @@ public class StatusViewModel extends ViewModel {
         currView.setText(resources.getString(R.string.signal_level) + data.get(8));
         ImageView signalImage = v.findViewById(R.id.signal_level_img);
         Integer level = Integer.parseInt(data.get(9));
-        switch (level) {
-            case 0:
-                signalImage.setImageResource(level0signal);
-                break;
-            case 1:
-                signalImage.setImageResource(level1signal);
-                break;
-            case 2:
-                signalImage.setImageResource(level2signal);
-                break;
-            case 3:
-                signalImage.setImageResource(level3signal);
-                break;
-            case 4:
-                signalImage.setImageResource(level4signal);
-                break;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            switch (level) {
+                case 0:
+                    signalImage.setImageResource(level0signal);
+                    break;
+                case 1:
+                    signalImage.setImageResource(level1signal);
+                    break;
+                case 2:
+                    signalImage.setImageResource(level2signal);
+                    break;
+                case 3:
+                    signalImage.setImageResource(level3signal);
+                    break;
+                case 4:
+                    signalImage.setImageResource(level4signal);
+                    break;
+            }
         }
     }
 
