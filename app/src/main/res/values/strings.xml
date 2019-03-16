@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">LQ84i</string>
+    <string name="snackbarmessage">La aplicación está actualizando, por favor espera</string>
     <string name="acerca_de">Acerca de</string>
     <string name="settings">Configuración</string>
     <string name="callState">Estado de la llamada: </string>
@@ -7,8 +8,25 @@
     <string name="serviceState">Estado del servicio: </string>
     <string name="gps_location">Localización GPS: </string>
     <string name="cell_location">Localización celda: </string>
+    <string name="downloadSpeed">Velocidad de descarga: </string>
+    <string name="uploadSpeed">Velocidad de subida: </string>
     <string name="signal_level">Nivel de Señal: </string>
     <string name="data">Datos: </string>
+    <string name="downlink">Descarga</string>
+    <string name="uplink">Subida</string>
+    <string name="time_downlink">Tiempo de Descarga: </string>
+    <string name="time_uplink">Tiempo de Subida: </string>
+    <string name="packet_downlink">Paquetes perdidos en descarga: </string>
+    <string name="packet_uplink">Paquetes perdidos en subida: </string>
+    <string name="totalpackets_downlink">Paquetes totales en descarga: </string>
+    <string name="totalpackets_uplink">Paquetes totales en subida: </string>
+    <string name="rtt_downlink">RTT descarga: </string>
+    <string name="rtt_uplink">RTT subida: </string>
+    <string name="jitter_downlink">Jitter descarga: </string>
+    <string name="jitter_uplink">Jitter subida: </string>
+    <string name="reload">Recargar valores</string>
+    <string name="uplink_delay">Retardo de subida: </string>
+    <string name="downlink_delay">Retardo de descarga: </string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -26,7 +44,7 @@
     <string name="network_type">Tipo de red móvil: </string>
     <string name="voice_radio_type">Tipo de radio voz: </string>
     <string name="update">Actualizar</string>
-    <string name="save_as_csv">Guardar como CSV</string>
+    <string name="calculate_speed">Calcular velocidades</string>
     <string name="data_saved">¡Datos guardados con éxito!</string>
     <string name="error_saving">No se pudo guardar</string>
     <string name="listener_pref">Variación de medición</string>

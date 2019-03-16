@@ -22,6 +22,7 @@ import java.io.File;
 import java.net.URLConnection;
 
 import rcmm.unex.es.lq84i.R;
+import rcmm.unex.es.lq84i.fragments.MeasuresFragment;
 import rcmm.unex.es.lq84i.fragments.PreferenceFrag;
 import rcmm.unex.es.lq84i.fragments.StatusFragment;
 import rcmm.unex.es.lq84i.interfaces.DataSharer;
@@ -70,6 +71,10 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().
                     add(R.id.frag_container, new StatusFragment()).commit();
         }
+    }
+
+    public void changeToMeasuresFragment() {
+        getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.frag_container, new MeasuresFragment()).commit();
     }
 
     @Override

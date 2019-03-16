@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/measurement_cellid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/cell_location" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/downlink"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/downlink_speed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/downloadSpeed" />
+
+            <TextView
+                android:id="@+id/downlink_throughtput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/time_downlink" />
+
+            <TextView
+                android:id="@+id/downlink_packetloss"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/packet_downlink" />
+
+            <TextView
+                android:id="@+id/downlink_totalpacket"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/totalpackets_downlink" />
+
+            <TextView
+                android:id="@+id/downlink_delay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/downlink_delay" />
+
+            <TextView
+                android:id="@+id/downlink_jitter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/jitter_downlink" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:text="@string/uplink"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/uplink_speed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/uploadSpeed" />
+
+            <TextView
+                android:id="@+id/throughtput_uplink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/time_uplink" />
+
+            <TextView
+                android:id="@+id/uplink_packetloss"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/packet_uplink" />
+
+            <TextView
+                android:id="@+id/uplink_totalpackage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/totalpackets_uplink" />
+
+            <TextView
+                android:id="@+id/uplink_rtt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/rtt_uplink" />
+
+            <TextView
+                android:id="@+id/uplink_delay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/uplink_delay" />
+
+            <TextView
+                android:id="@+id/uplink_jitter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/jitter_uplink" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/refresh_values"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40sp"
+            android:gravity="center"
+            android:text="@string/reload"
+            tools:layout_editor_absoluteY="511dp" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

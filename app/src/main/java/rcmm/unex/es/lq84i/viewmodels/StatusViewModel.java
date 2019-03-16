@@ -125,24 +125,24 @@ public class StatusViewModel extends ViewModel {
         TextView currView;
         updateData();
         currView = v.findViewById(R.id.device_id);
-        currView.setText(resources.getString(R.string.device_id) + data.get(0));
+        currView.setText(resources.getString(R.string.device_id) + " " + data.get(0));
         currView = v.findViewById(R.id.phone_num);
-        currView.setText(resources.getString(R.string.phone_num) + data.get(1));
+        currView.setText(resources.getString(R.string.phone_num) + " " + data.get(1));
         currView = v.findViewById(R.id.software_ver);
-        currView.setText(resources.getString(R.string.software_ver) + data.get(2));
+        currView.setText(resources.getString(R.string.software_ver) + " " + data.get(2));
         currView = v.findViewById(R.id.op_name);
-        currView.setText(resources.getString(R.string.op_name) + data.get(3));
+        currView.setText(resources.getString(R.string.op_name) + " " + data.get(3));
         currView = v.findViewById(R.id.sim_op);
-        currView.setText(resources.getString(R.string.sim_op) + data.get(4));
+        currView.setText(resources.getString(R.string.sim_op) + " " + data.get(4));
         currView = v.findViewById(R.id.sub_id);
-        currView.setText(resources.getString(R.string.sub_id) + data.get(5));
+        currView.setText(resources.getString(R.string.sub_id) + " " + data.get(5));
         currView = v.findViewById(R.id.network_type);
-        currView.setText(resources.getString(R.string.network_type) + data.get(6));
+        currView.setText(resources.getString(R.string.network_type) + " " + data.get(6));
         currView = v.findViewById(R.id.voice_radio_type);
-        currView.setText(resources.getString(R.string.voice_radio_type) + data.get(7));
+        currView.setText(resources.getString(R.string.voice_radio_type) + " " + data.get(7));
         currView = v.findViewById(R.id.gps_location);
         if (location != null)
-            currView.setText(location.getLatitude() + " " + location.getLongitude());
+            currView.setText(resources.getString(R.string.gps_location) + location.getLatitude() + " " + location.getLongitude());
         currView = v.findViewById(R.id.signal_level);
         currView.setText(resources.getString(R.string.signal_level) + data.get(8));
         ImageView signalImage = v.findViewById(R.id.signal_level_img);
@@ -271,7 +271,7 @@ public class StatusViewModel extends ViewModel {
     public void startListeners(final TextView callStateView, final TextView connectionStateView,
                                final TextView serviceStateView, final TextView cellLocationView,
                                final TextView phoneLocationView, final TextView signalView,
-                               final ImageView signalImage, final TextView dataView, View v, Resources resources) {
+                               final ImageView signalImage, final TextView dataView, View v, final Resources resources) {
         int event = PhoneStateListener.LISTEN_DATA_ACTIVITY |
                 PhoneStateListener.LISTEN_CALL_STATE |
                 PhoneStateListener.LISTEN_CALL_FORWARDING_INDICATOR |
@@ -347,7 +347,7 @@ public class StatusViewModel extends ViewModel {
                         dataState = "Latente";
                         break;
                 }
-                dataView.setText(dataState);
+                dataView.setText(resources.getString(R.string.data) + " " + dataState);
                 super.onDataActivity(direction);
             }
 
@@ -421,15 +421,7 @@ public class StatusViewModel extends ViewModel {
             ex.printStackTrace();
         }
     }
-//
-//    public void uplinkCalculate(){
-//
-//
-//
-//        long bytes = TrafficStats.getUidTxBytes(uid); //Método que calcula los bytes que transmite el proceso desde que se inicia.
-//
-//        Log.i("testeo", "Los bytes que se han transmitido son: " + bytes);
-//    }
+
 
     public void sendMeasuredData(DataSharer sharer) {
         sharer.shareData(output.getOutputFile((Context) sharer));

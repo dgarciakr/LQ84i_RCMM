@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
@@ -21,7 +20,7 @@ import android.widget.TextView;
 import java.util.Objects;
 
 import rcmm.unex.es.lq84i.R;
-import rcmm.unex.es.lq84i.interfaces.DataSharer;
+import rcmm.unex.es.lq84i.activities.MainActivity;
 import rcmm.unex.es.lq84i.viewmodels.StatusViewModel;
 import rcmm.unex.es.lq84i.viewmodels.factories.StatusViewModelFactory;
 
@@ -40,7 +39,7 @@ public class StatusFragment extends Fragment {
     /**
      * Actividad anfitriona
      */
-    private Activity mHost;
+    private static Activity mHost = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,10 +58,10 @@ public class StatusFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View res = inflater.inflate(R.layout.status_info, container, false);
+        final View res = inflater.inflate(R.layout.status_info, container, false);
         dataHolder = res.findViewById(R.id.data);
         Button b = res.findViewById(R.id.button);
-        Button s = res.findViewById(R.id.save_csv);
+        Button s = res.findViewById(R.id.calculate_speed);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,10 +71,7 @@ public class StatusFragment extends Fragment {
         s.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.sendMeasuredData((DataSharer) mHost);
-                Snackbar.make(Objects.requireNonNull(mHost.getCurrentFocus()),
-                        mHost.getResources().getString(R.string.data_saved),
-                        Snackbar.LENGTH_LONG);
+                ((MainActivity) mHost).changeToMeasuresFragment();
             }
         });
         viewModel.startListeners((TextView) res.findViewById(R.id.call_state),
