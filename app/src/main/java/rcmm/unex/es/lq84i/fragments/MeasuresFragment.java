@@ -39,9 +39,9 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
     private LocationManager lm;
     private Integer testN;
     private FileIO csv;
+    private boolean calculatedOnce = false;
     private static final String FILENAME = "QoSTests.csv";
     private static final String CSVHEADER = "test;latitude;longitude;RSRP;CID;dlspeed;ulspeed;dlthroughput;ulthroughput;dlpacketloss;ulpacketloss;dlpackets;ulpackets;ulRTT;dldelay;uldelay;dljitter;uljitter";
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
         testN = 0;
         mHost = getActivity();
         csv = new FileIO(FILENAME, mHost);
+        csv.saveData(CSVHEADER);
         measurement = new DownlinkMeasurement("boquique.unex.es", mHost, this);
         tm = (TelephonyManager)
                 Objects.requireNonNull(mHost).getSystemService(Context.TELEPHONY_SERVICE);
@@ -72,7 +73,6 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recalculate();
                 Snackbar.make(v, mHost.getResources().getString(R.string.snackbarmessage), Snackbar.LENGTH_SHORT).show();
             }
         });
@@ -138,6 +138,17 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
     @Override
     public void updateUI() {
         realice(v);
+        Button b = v.findViewById(R.id.refresh_values);
+        if (!calculatedOnce) {
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recalculate();
+                    Snackbar.make(v, mHost.getResources().getString(R.string.snackbar_2), Snackbar.LENGTH_SHORT).show();
+                }
+            });
+            calculatedOnce = true;
+        }
         saveTest();
     }
 
@@ -170,7 +181,7 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
                 }
             }
             GsmCellLocation cellLocation = (GsmCellLocation) tm.getCellLocation();
-            String cid = Integer.toHexString(cellLocation.getCid());
+            String cid = Integer.toString(cellLocation.getCid());
             String format = testN + ";" + currLoc.getLatitude() + ";" + currLoc.getLongitude() +
                     ";" + dbm + ";" + cid + ";" + measurement.getDownlinkSpeed() + ";" +
                     measurement.getUplinkSpeed() + ";" + measurement.getDownlinkThroughput() + ";"

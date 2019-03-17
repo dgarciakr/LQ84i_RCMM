@@ -49,4 +49,5 @@
     <string name="error_saving">No se pudo guardar</string>
     <string name="listener_pref">Variación de medición</string>
     <string name="listener_pref_desc">Elige con las variaciones de qué se realizan mediciones (requiere reinicio)</string>
+    <string name="snackbar_2">Recalculando valores...</string>
 </resources>
