@@ -1,21 +1,34 @@
 package rcmm.unex.es.lq84i.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.telephony.CellInfo;
+import android.telephony.CellInfoGsm;
+import android.telephony.CellInfoLte;
 import android.telephony.TelephonyManager;
+import android.telephony.gsm.GsmCellLocation;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.List;
+import java.util.Objects;
+
 import rcmm.unex.es.lq84i.R;
 import rcmm.unex.es.lq84i.interfaces.LinkMeasurementPresenter;
 import rcmm.unex.es.lq84i.utility.DownlinkMeasurement;
+import rcmm.unex.es.lq84i.utility.FileIO;
 
 public class MeasuresFragment extends Fragment implements LinkMeasurementPresenter {
 
@@ -23,13 +36,25 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
     private DownlinkMeasurement measurement;
     private View v;
     private TelephonyManager tm;
+    private LocationManager lm;
+    private Integer testN;
+    private FileIO csv;
+    private static final String FILENAME = "QoSTests.csv";
+    private static final String CSVHEADER = "test;latitude;longitude;RSRP;CID;dlspeed;ulspeed;dlthroughput;ulthroughput;dlpacketloss;ulpacketloss;dlpackets;ulpackets;ulRTT;dldelay;uldelay;dljitter;uljitter";
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        testN = 0;
         mHost = getActivity();
+        csv = new FileIO(FILENAME, mHost);
         measurement = new DownlinkMeasurement("boquique.unex.es", mHost, this);
+        tm = (TelephonyManager)
+                Objects.requireNonNull(mHost).getSystemService(Context.TELEPHONY_SERVICE);
+        lm = (LocationManager)
+                Objects.requireNonNull(mHost.getSystemService(Context.LOCATION_SERVICE));
+
     }
 
     @Nullable
@@ -55,6 +80,7 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
 
     private void recalculate() {
         measurement = new DownlinkMeasurement("boquique.unex.es", mHost, this);
+        testN++;
     }
 
     public String parseSpeed(boolean download) {
@@ -112,5 +138,53 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
     @Override
     public void updateUI() {
         realice(v);
+        saveTest();
+    }
+
+    @Override
+    public void onDestroy() {
+        csv.end();
+        super.onDestroy();
+    }
+
+    private void saveTest() {
+        try {
+            Location currLoc = lm.getLastKnownLocation(lm.getAllProviders().get(0));
+            long bestTime = currLoc.getElapsedRealtimeNanos();
+            for (String provider : lm.getAllProviders()) {
+                @SuppressLint("MissingPermission") Location loc = lm.getLastKnownLocation(provider);
+                if (loc.getElapsedRealtimeNanos() > bestTime) {
+                    bestTime = loc.getElapsedRealtimeNanos();
+                    currLoc = loc;
+                }
+            }
+            Integer dbm = 0;
+            List<CellInfo> cellInfoList = tm.getAllCellInfo();
+            for (CellInfo cellInfo : cellInfoList) {
+                if (cellInfo instanceof CellInfoLte) {
+                    dbm = ((CellInfoLte) cellInfo).getCellSignalStrength().getDbm();
+                    break;
+                } else if (cellInfo instanceof CellInfoGsm) {
+                    dbm = ((CellInfoGsm) cellInfo).getCellSignalStrength().getDbm();
+                    break;
+                }
+            }
+            GsmCellLocation cellLocation = (GsmCellLocation) tm.getCellLocation();
+            String cid = Integer.toHexString(cellLocation.getCid());
+            String format = testN + ";" + currLoc.getLatitude() + ";" + currLoc.getLongitude() +
+                    ";" + dbm + ";" + cid + ";" + measurement.getDownlinkSpeed() + ";" +
+                    measurement.getUplinkSpeed() + ";" + measurement.getDownlinkThroughput() + ";"
+                    + measurement.getUplinkThroughput() + ";" + measurement.getDownlinkPackageLost()
+                    + ";" + measurement.getUplinkPackageLost() + ";" +
+                    measurement.getDownlinkTotalPackages() + ";" +
+                    measurement.getUplinkTotalPackages() + ";" + measurement.getUplinkRtt() + ";" +
+                    measurement.getDownlinkDelay() + ";" + measurement.getUplinkDelay() + ";" +
+                    measurement.getDownlinkJitter() + ";" + measurement.getUplinkJitter();
+            if (!csv.saveData(format)) {
+                Log.e("Measure", "No se pudieron guardar los datos");
+            }
+        } catch (SecurityException ex) {
+            ex.printStackTrace();
+        }
     }
 }
