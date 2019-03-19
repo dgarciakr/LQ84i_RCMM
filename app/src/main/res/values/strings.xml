@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">LQ84i</string>
-    <string name="snackbarmessage">La aplicación está actualizando, por favor espera</string>
+    <string name="snackbarmessage">La aplicación está calculando los valores, por favor espera</string>
     <string name="acerca_de">Acerca de</string>
     <string name="settings">Configuración</string>
     <string name="callState">Estado de la llamada: </string>
@@ -12,8 +12,13 @@
     <string name="uploadSpeed">Velocidad de subida: </string>
     <string name="signal_level">Nivel de Señal: </string>
     <string name="data">Datos: </string>
+    <string name="preference_timeupdate">¿Cada cuanto tiempo quieres que actualice los datos la app? (En segundos, no introducir decimales por favor)</string>
+    <string name="preference_distanceupdate">¿Cada cuanta distancia quieres que actualize los datos la app? (En metros, no introducir decimales por favor)</string>
+    <string name="authors">Autores:\n\n\t    Daniel García Martín\n\t    Juan Luis Herrera González\n\nApp realizada para la Asignatura de Redes de Comunicaciones Móviles y Multimedia</string>
+    <string name="close">Cerrar</string>
     <string name="downlink">Descarga</string>
     <string name="uplink">Subida</string>
+    <string name="snackbar_updateddata">Datos Actualizados</string>
     <string name="time_downlink">Tiempo de Descarga: </string>
     <string name="time_uplink">Tiempo de Subida: </string>
     <string name="packet_downlink">Paquetes perdidos en descarga: </string>

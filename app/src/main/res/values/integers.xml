@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="UPDATE_TIME">1</integer>
+    <integer name="DISTANCE_UPDATE">10</integer>
+</resources>

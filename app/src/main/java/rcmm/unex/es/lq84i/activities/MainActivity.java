@@ -22,6 +22,7 @@ import java.io.File;
 import java.net.URLConnection;
 
 import rcmm.unex.es.lq84i.R;
+import rcmm.unex.es.lq84i.fragments.AboutDialogFragment;
 import rcmm.unex.es.lq84i.fragments.MeasuresFragment;
 import rcmm.unex.es.lq84i.fragments.PreferenceFrag;
 import rcmm.unex.es.lq84i.fragments.StatusFragment;
@@ -29,6 +30,8 @@ import rcmm.unex.es.lq84i.interfaces.DataSharer;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DataSharer {
+
+    private StatusFragment statusFragment = new StatusFragment();
 
     private static final String[] PERMISSIONS = {
             android.Manifest.permission.ACCESS_FINE_LOCATION,
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().
-                    add(R.id.frag_container, new StatusFragment()).commit();
+                    add(R.id.frag_container, statusFragment).commit();
         }
     }
 
@@ -103,6 +106,14 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    public void newPreferenceTimeValue(String value) {
+        statusFragment.newPreferenceTimeValue(value);
+    }
+
+    public void newPreferenceDistanceValue(String value) {
+        statusFragment.newPreferenceDistanceValue(value);
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
@@ -112,6 +123,8 @@ public class MainActivity extends AppCompatActivity
             FragmentTransaction transact = getSupportFragmentManager().beginTransaction();
             transact.replace(R.id.frag_container, new PreferenceFrag()).addToBackStack(null);
             transact.commit();
+        } else {
+            new AboutDialogFragment().show(getFragmentManager(), "");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

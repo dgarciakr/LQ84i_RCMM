@@ -14,17 +14,19 @@ public class StatusViewModelFactory extends ViewModelProvider.NewInstanceFactory
     private LocationManager lm;
     private boolean time;
     private Context context;
+    private Integer UPDATE_TIME;
 
-    public StatusViewModelFactory(TelephonyManager tm, LocationManager lm, boolean time, Context context) {
+    public StatusViewModelFactory(TelephonyManager tm, LocationManager lm, boolean time, Integer UPDATE_TIME, Context context) {
         this.tm = tm;
         this.lm = lm;
         this.time = time;
         this.context = context;
+        this.UPDATE_TIME = UPDATE_TIME;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new StatusViewModel(tm, lm, time, context);
+        return (T) new StatusViewModel(tm, lm, time, UPDATE_TIME, context);
     }
 }

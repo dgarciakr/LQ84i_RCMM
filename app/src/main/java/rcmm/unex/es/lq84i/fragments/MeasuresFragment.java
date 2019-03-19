@@ -1,6 +1,5 @@
 package rcmm.unex.es.lq84i.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
@@ -41,7 +40,7 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
     private FileIO csv;
     private boolean calculatedOnce = false;
     private static final String FILENAME = "QoSTests.csv";
-    private static final String CSVHEADER = "test;latitude;longitude;RSRP;CID;dlspeed;ulspeed;dlthroughput;ulthroughput;dlpacketloss;ulpacketloss;dlpackets;ulpackets;ulRTT;dldelay;uldelay;dljitter;uljitter";
+    private static final String CSVHEADER = "test;latitude;longitude;RSRP;CID;dlspeed;ulspeed;dlthroughput;ulthroughput;dlpacketloss;ulpacketloss;dlpackets;ulpackets;ulRTT;dldelay;uldelay;dljitter;uljitter\n";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,11 +68,12 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
     public void onViewCreated(@NonNull final View res, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(res, savedInstanceState);
         v = res;
+        Snackbar.make(v, mHost.getResources().getString(R.string.snackbarmessage), Snackbar.LENGTH_LONG).show();
         Button b = v.findViewById(R.id.refresh_values);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, mHost.getResources().getString(R.string.snackbarmessage), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(v, mHost.getResources().getString(R.string.snackbarmessage), Snackbar.LENGTH_LONG).show();
             }
         });
     }
@@ -105,6 +105,7 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
     }
 
     public void realice(View res) {
+        Snackbar.make(v, mHost.getResources().getString(R.string.snackbar_updateddata), Snackbar.LENGTH_SHORT).show();
         TextView cellid = res.findViewById(R.id.measurement_cellid);
         cellid.setText(getResources().getString(R.string.cell_location) + " " + measurement.getCellid());
         TextView downlink_speed = res.findViewById(R.id.downlink_speed);
@@ -163,10 +164,13 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
             Location currLoc = lm.getLastKnownLocation(lm.getAllProviders().get(0));
             long bestTime = currLoc.getElapsedRealtimeNanos();
             for (String provider : lm.getAllProviders()) {
-                @SuppressLint("MissingPermission") Location loc = lm.getLastKnownLocation(provider);
-                if (loc.getElapsedRealtimeNanos() > bestTime) {
-                    bestTime = loc.getElapsedRealtimeNanos();
-                    currLoc = loc;
+                Location loc = lm.getLastKnownLocation(provider);
+                if (loc != null) {
+                    Log.i("testeo", "La localizacion es " + currLoc + " y la localizacion " + loc);
+                    if (loc.getElapsedRealtimeNanos() > bestTime) {
+                        bestTime = loc.getElapsedRealtimeNanos();
+                        currLoc = loc;
+                    }
                 }
             }
             Integer dbm = 0;
@@ -190,7 +194,7 @@ public class MeasuresFragment extends Fragment implements LinkMeasurementPresent
                     measurement.getDownlinkTotalPackages() + ";" +
                     measurement.getUplinkTotalPackages() + ";" + measurement.getUplinkRtt() + ";" +
                     measurement.getDownlinkDelay() + ";" + measurement.getUplinkDelay() + ";" +
-                    measurement.getDownlinkJitter() + ";" + measurement.getUplinkJitter();
+                    measurement.getDownlinkJitter() + ";" + measurement.getUplinkJitter() + "\n";
             if (!csv.saveData(format)) {
                 Log.e("Measure", "No se pudieron guardar los datos");
             }

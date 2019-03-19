@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,10 +49,12 @@ public class StatusFragment extends Fragment {
         PreferenceManager.setDefaultValues(mHost, R.xml.preferences, false);
         String pref = PreferenceManager.getDefaultSharedPreferences(mHost).getString(PreferenceFrag.KEY_LISTENER_PREFERENCE, "time");
         boolean time = pref.equals("time");
+        Integer UPDATE_TIME = PreferenceManager.getDefaultSharedPreferences(mHost).getInt("UPDATE_TIME", 1);
+        Log.i("datosquequierover", "El valor de la preferencia es " + UPDATE_TIME + " y la otra cosa que hace juanlu es " + pref.equals("UPDATE_TIME"));
         StatusViewModelFactory factory = new StatusViewModelFactory((TelephonyManager)
                 Objects.requireNonNull(mHost).getSystemService(Context.TELEPHONY_SERVICE),
                 (LocationManager)
-                        Objects.requireNonNull(mHost.getSystemService(Context.LOCATION_SERVICE)), time, mHost);
+                        Objects.requireNonNull(mHost.getSystemService(Context.LOCATION_SERVICE)), time, UPDATE_TIME, mHost);
         viewModel = ViewModelProviders.of(this, factory).get(StatusViewModel.class);
     }
 
@@ -90,6 +93,14 @@ public class StatusFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         updateUI();
+    }
+
+    public void newPreferenceTimeValue(String value) {
+        viewModel.newPreferenceTimeValue(value);
+    }
+
+    public void newPreferenceDistanceValue(String value) {
+        viewModel.newPreferenceDistanceValue(value);
     }
 
     private void updateUI() {

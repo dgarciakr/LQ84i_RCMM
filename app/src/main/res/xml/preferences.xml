@@ -8,4 +8,16 @@
         android:key="listener_type"
         android:summary="@string/listener_pref_desc"
         android:title="@string/listener_pref" />
+    <EditTextPreference
+        android:defaultValue="@integer/UPDATE_TIME"
+        android:key="pref_updatetime"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/preference_timeupdate" />
+    <EditTextPreference
+        android:defaultValue="@integer/DISTANCE_UPDATE"
+        android:key="pref_updatedistance"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/preference_distanceupdate" />
 </PreferenceScreen>

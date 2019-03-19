@@ -57,7 +57,7 @@ public class StatusViewModel extends ViewModel {
     /**
      * Tiempo entre actualizaciones del listener por tiempo
      */
-    private static final Integer UPDATE_TIME = 500;
+    private Integer UPDATE_TIME;
 
     /**
      * UID del proceso
@@ -67,7 +67,7 @@ public class StatusViewModel extends ViewModel {
     /*
      * Distancia entre actualizaciones
      */
-    private static final float UPDATE_DISTANCE = (float) 0.5;
+    private static float UPDATE_DISTANCE = (float) 0.5;
 
     /**
      * Datos a recoger y mostrar
@@ -103,11 +103,12 @@ public class StatusViewModel extends ViewModel {
     private static Location location;
 
 
-    public StatusViewModel(TelephonyManager tm, LocationManager lm, boolean time, Context context) {
+    public StatusViewModel(TelephonyManager tm, LocationManager lm, boolean time, Integer UPDATE_TIME, Context context) {
         data = new LinkedHashMap<>();
         this.tm = tm;
         this.lm = lm;
         this.time = time;
+        this.UPDATE_TIME = UPDATE_TIME;
         output = new FileIO(FILENAME, context);
         output.saveData(CSVHEADER);
         initializeBaseData();
@@ -374,9 +375,12 @@ public class StatusViewModel extends ViewModel {
 
 
         LocationListener locationListener = new MyLocationListener(v, resources);
+
+        Log.i("datosquequierover", "Esto se actualiza cada " + UPDATE_TIME * 1000);
+
         if (time) {
             try {
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_TIME, 0,
+                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, (UPDATE_TIME * 1000), 0,
                         locationListener);
             } catch (SecurityException ex) {
                 ex.printStackTrace();
@@ -390,7 +394,6 @@ public class StatusViewModel extends ViewModel {
             }
         }
 
-        LocationListener positionListener = new MyLocationListener(v, resources);
         try {
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, UPDATE_DISTANCE,
                     locationListener);
@@ -400,6 +403,14 @@ public class StatusViewModel extends ViewModel {
 
     }
 
+
+    public void newPreferenceTimeValue(String value) {
+        UPDATE_TIME = Integer.parseInt(value);
+    }
+
+    public void newPreferenceDistanceValue(String value) {
+        UPDATE_DISTANCE = Integer.parseInt(value);
+    }
     private void measure(int signal, Location location) {
         try {
             String mcc = tm.getNetworkOperator().substring(0, 3);
